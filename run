@@ -1,0 +1,30 @@
+#!/usr/bin/env python3
+
+import os
+import sys
+import argparse
+
+from CoverageConverter.converter import CoverageConverter
+
+def main():
+    converter = CoverageConverter()
+
+    parser = argparse.ArgumentParser()
+    subparsers = parser.add_subparsers(help='commands', dest="command")
+
+    convert_deployment_result = subparsers.add_parser('convert', help='Code coverage converter to sonarqube format from deployment result json')
+    convert_deployment_result.add_argument('-d', '--deployfile', dest='deployfile', required=True, help='Salesforce deploy result containing json')
+
+    args = parser.parse_args()
+
+    if args.command == 'convert':
+        converter.convert_deployment_json(deployment_json=args.deployfile)
+    else:
+        print("Choose command! Use -h argument to check!")
+
+if __name__ == '__main__':
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("Interrupted by user.")
+        sys.exit(0)
